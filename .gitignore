@@ -1,0 +1,15 @@
+# LazyVim data
+**/lazy-lock.json
+**/.git/
+
+# Editor backups
+*~
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# LazyVim state
+**/lazyvim.json
+nvim/.config/

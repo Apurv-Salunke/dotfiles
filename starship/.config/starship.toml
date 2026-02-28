@@ -1,0 +1,66 @@
+# Minimal Starship Configuration (Catppuccin Mocha Theme)
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+command_timeout = 1000
+
+# Catppuccin Mocha Palette
+# Overlay0 = "#6c7086"
+# Blue = "#89b4fa"
+# Mauve = "#cba6f7"
+# Red = "#f38ba8"
+# Peach = "#fab387"
+# Green = "#a6e3a1"
+# Yellow = "#f9e2af"
+# Lavender = "#b4befe"
+# Text = "#cdd6f4"
+
+format = """
+[┌─](bold #6c7086)$directory$git_branch$git_status
+[└─](bold #6c7086)$character"""
+
+# Move the rest to the right side
+right_format = """$cmd_duration$python$nodejs$rust$golang$docker_context"""
+
+[character]
+success_symbol = "[❯](bold #89b4fa)"
+error_symbol = "[❯](bold #f38ba8)"
+vimcmd_symbol = "[❮](bold #a6e3a1)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold #89b4fa"
+read_only = " 🔒"
+
+[git_branch]
+symbol = " "
+style = "bold #cba6f7"
+format = "on [$symbol$branch]($style) "
+
+[git_status]
+style = "bold #f38ba8"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+
+[cmd_duration]
+min_time = 2000
+format = "[$duration]($style) "
+style = "#fab387"
+
+# Use standard Starship presets (no overrides) to ensure compatibility
+# But tint them with Catppuccin colors
+
+[python]
+style = "#f9e2af"
+
+[nodejs]
+style = "#a6e3a1"
+
+[rust]
+style = "#f38ba8"
+
+[golang]
+style = "#89b4fa"
+
+[docker_context]
+style = "#b4befe"
