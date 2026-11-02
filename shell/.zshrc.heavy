@@ -1,0 +1,19 @@
+# Full interactive setup — Terminal.app / iTerm only (sourced from ~/.zshrc)
+local brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
+
+[[ -f "$HOME/.dotfiles-aliases.zsh" ]] && source "$HOME/.dotfiles-aliases.zsh"
+
+[[ -f "${brew_prefix}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
+  source "${brew_prefix}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[[ -f "${brew_prefix}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && \
+  source "${brew_prefix}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+[[ -f "${brew_prefix}/opt/fzf/shell/key-bindings.zsh" ]] && \
+  source "${brew_prefix}/opt/fzf/shell/key-bindings.zsh"
+[[ -f "${brew_prefix}/opt/fzf/shell/completion.zsh" ]] && \
+  source "${brew_prefix}/opt/fzf/shell/completion.zsh"
+
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+[[ "$TERM" != "dumb" ]] && command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
+
+export JAVA_HOME="$(/usr/libexec/java_home -v 17 2>/dev/null)"
+[[ -n "$JAVA_HOME" ]] && export PATH="$JAVA_HOME/bin:$PATH"

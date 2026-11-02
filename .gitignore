@@ -1,7 +1,3 @@
-# LazyVim data
-**/lazy-lock.json
-**/.git/
-
 # Editor backups
 *~
 *.swp
@@ -9,7 +5,3 @@
 
 # macOS
 .DS_Store
-
-# LazyVim state
-**/lazyvim.json
-nvim/.config/

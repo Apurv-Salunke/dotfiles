@@ -1,84 +1,76 @@
-# PATH
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
+# Detect Cursor / VS Code (including Glass terminal — ignores terminal.integrated profiles)
+_is_cursor_context() {
+  [[ -n "${VSCODE_RESOLVING_ENVIRONMENT:-}" ]] && return 0
+  [[ "${TERM_PROGRAM:-}" == "vscode" ]] && return 0
+  [[ -n "${CURSOR_TRACE_ID:-}${CURSOR_AGENT:-}${CURSOR_CLI_MODE:-}${CURSOR_CHANNEL:-}" ]] && return 0
+  return 1
+}
 
-# NVM
+# Cursor probing env on app launch
+if [[ -n "${VSCODE_RESOLVING_ENVIRONMENT:-}" ]]; then
+  [[ -f "$HOME/.cursor-fast-zsh.zsh" ]] && source "$HOME/.cursor-fast-zsh.zsh"
+  return
+fi
+
+# Cursor / Glass / agent shells — minimal only (never load plugins/starship/bun hooks)
+if _is_cursor_context; then
+  export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+  [[ -f "$HOME/.pyenv-guard.zsh" ]] && source "$HOME/.pyenv-guard.zsh"
+  export NVM_DIR="$HOME/.nvm"
+  # nvm's default Node first on PATH, so tools that call `node` (pnpm, corepack) get it before nvm loads.
+  [[ -r "$NVM_DIR/alias/default" ]] && export PATH="$NVM_DIR/versions/node/v$(<"$NVM_DIR/alias/default")/bin:$PATH"
+  _nvm_lazy_load() {
+    unset -f nvm node npm npx _nvm_lazy_load
+    [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"
+  }
+  nvm()  { _nvm_lazy_load; nvm  "$@"; }
+  node() { _nvm_lazy_load; node "$@"; }
+  npm()  { _nvm_lazy_load; npm  "$@"; }
+  npx()  { _nvm_lazy_load; npx  "$@"; }
+  PROMPT='%F{cyan}%n@%m%f %~ %# '
+  [[ -f "$HOME/.zshrc.cursor-extras" ]] && source "$HOME/.zshrc.cursor-extras"
+  return
+fi
+
+# --- Normal shells (Terminal.app, iTerm, etc.) ---
+export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/local/sbin:$PATH"
+
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+# nvm's default Node first on PATH, so tools that call `node` (pnpm, corepack) get it before nvm loads.
+[[ -r "$NVM_DIR/alias/default" ]] && export PATH="$NVM_DIR/versions/node/v$(<"$NVM_DIR/alias/default")/bin:$PATH"
+_nvm_lazy_load() {
+  unset -f nvm node npm npx _nvm_lazy_load
+  [[ -s "/opt/homebrew/opt/nvm/nvm.sh" ]] && source "/opt/homebrew/opt/nvm/nvm.sh"
+  [[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ]] && source "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+}
+nvm()  { _nvm_lazy_load; nvm  "$@"; }
+node() { _nvm_lazy_load; node "$@"; }
+npm()  { _nvm_lazy_load; npm  "$@"; }
+npx()  { _nvm_lazy_load; npx  "$@"; }
+[[ -f "$HOME/.pyenv-guard.zsh" ]] && source "$HOME/.pyenv-guard.zsh"
 
-# Pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
-# pnpm
-export PNPM_HOME="$HOME/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-
-# Java (OpenJDK)
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
-# Android Studio
 export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$PATH:$ANDROID_HOME/emulator"
-export PATH="$PATH:$ANDROID_HOME/platform-tools"
-
-# VSCode
-export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
-
-# Windsurf
+export PATH="$PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools"
 export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 
-# Antigravity
-export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
-
-# Deduplicate PATH
 typeset -U PATH
 
-# eza (better ls)
-alias ls='eza --icons'
-alias ll='eza -lh --icons --git'
-alias la='eza -lah --icons --git'
-alias lt='eza --tree --icons'
-
-# Git aliases
-alias ga='git add'
-alias gaa='git add .'
-alias gs='git status'
-alias gc='git commit -m'
-alias gcm='git checkout main'
-alias gco='git checkout'
-alias gb='git branch'
-alias gpl='git pull'
-alias gps='git push'
+if command -v eza >/dev/null 2>&1; then
+  alias ls='eza --icons' ll='eza -lh --icons --git' la='eza -lah --icons --git' lt='eza --tree --icons'
+fi
+alias ga='git add' gaa='git add .' gs='git status' gc='git commit -m'
+alias gcm='git checkout main' gco='git checkout' gb='git branch'
+alias gpl='git pull' gps='git push'
 alias gl='git log --oneline --graph --decorate --all'
-alias gd='git diff'
-alias gr='git restore'
-alias grs='git restore --staged'
-alias gcl='git clone'
+alias gd='git diff' gr='git restore' grs='git restore --staged' gcl='git clone'
+alias pwc='pwd | pbcopy'
 
-# Dotfiles aliases
-[ -f "$HOME/.dotfiles-aliases.zsh" ] && source "$HOME/.dotfiles-aliases.zsh"
+if [[ -o interactive ]] && [[ "${TERM_PROGRAM:-}" == "Apple_Terminal" || "${TERM_PROGRAM:-}" == "iTerm.app" || "${TERM_PROGRAM:-}" == "WezTerm" ]]; then
+  [[ -f "$HOME/.zshrc.heavy" ]] && source "$HOME/.zshrc.heavy"
+fi
 
-# Zsh plugins (via Homebrew)
-source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-
-# fzf
-source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
-source "$(brew --prefix)/opt/fzf/shell/completion.zsh"
-
-# Zoxide (smarter cd)
-eval "$(zoxide init zsh)"
-
-# Starship prompt
-eval "$(starship init zsh)"
+[[ -f ~/.devserver.zsh ]] && source ~/.devserver.zsh
