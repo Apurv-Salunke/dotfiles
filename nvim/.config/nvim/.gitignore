@@ -1,0 +1,10 @@
+# LazyVim data
+lazy-lock.json
+
+# Editor backups
+*~
+*.swp
+*.swo
+
+# macOS
+.DS_Store

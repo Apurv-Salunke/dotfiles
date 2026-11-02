@@ -1,0 +1,10 @@
+{
+  "themes": {
+    "catppuccin": {
+      "lazy": true
+    }
+  },
+  "lsp": {
+    "format_on_save": false
+  }
+}
