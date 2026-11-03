@@ -1,0 +1,33 @@
+[user]
+	name = Apurv-Salunke
+	email = salunke.apurv7@gmail.com
+
+[init]
+	defaultBranch = main
+
+[pull]
+	ff = only
+
+[push]
+	autoSetupRemote = true
+
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	syntax-theme = Catppuccin Mocha
+
+[merge]
+	conflictStyle = zdiff3
+
+[diff]
+	colorMoved = default
+
+# Machine-local overrides (e.g. work email, signing keys). Not tracked.
+[include]
+	path = ~/.gitconfig.local
