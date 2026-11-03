@@ -2,8 +2,8 @@
 alias config='git -C ~/dotfiles'
 
 # Quick stow commands
-alias stow-install="stow --restow --target ~ -d ~/dotfiles shell wezterm nvim lazygit starship"
-alias stow-remove="stow -D --target ~ -d ~/dotfiles shell wezterm nvim lazygit starship"
+alias stow-install="stow --restow --target ~ -d ~/dotfiles shell git wezterm nvim lazygit starship"
+alias stow-remove="stow -D --target ~ -d ~/dotfiles shell git wezterm nvim lazygit starship"
 
 # View dotfiles status
 alias config-status='git -C ~/dotfiles status --short'

@@ -1,0 +1,56 @@
+# Everything else installed on the main machine. Skipped with DOTFILES_MINIMAL=1.
+
+# CLI utilities
+brew "gh"
+brew "git-filter-repo"
+brew "p7zip"
+brew "rclone"
+brew "tree"
+brew "wget"
+brew "yazi"
+brew "gdown"
+brew "graphviz"
+brew "ffmpeg"
+brew "imagemagick"
+
+# Languages & build
+brew "go"
+brew "maven"
+brew "pipx"
+brew "cookiecutter"
+brew "cocoapods"
+brew "capnp"
+brew "ta-lib"
+brew "tcl-tk"
+brew "python-tk@3.11"
+
+# Services & infra
+brew "caddy"
+brew "cloudflared"
+brew "mariadb"
+brew "redis"
+brew "livekit-cli"
+brew "helm"
+brew "k3d"
+brew "k9s"
+brew "kind"
+
+# Security tooling
+brew "gobuster"
+brew "hydra"
+brew "nikto"
+brew "sherlock"
+brew "subfinder"
+
+# Apps
+cask "android-platform-tools"
+cask "blender"
+cask "chromedriver"
+cask "chromium"
+cask "claude-code"
+cask "codex"
+cask "iina"
+cask "ngrok"
+cask "stats"
+cask "unnaturalscrollwheels"
+cask "zulu@17"

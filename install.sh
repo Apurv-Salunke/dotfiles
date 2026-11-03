@@ -3,9 +3,10 @@
 #   curl -fsSL https://raw.githubusercontent.com/Apurv-Salunke/dotfiles/main/install.sh | bash
 set -euo pipefail
 
+#   DOTFILES_MINIMAL=1  install only the core Brewfile (skip Brewfile.extra)
 REPO="https://github.com/Apurv-Salunke/dotfiles.git"
-DOTFILES="$HOME/dotfiles"
-PACKAGES=(shell wezterm nvim lazygit starship)
+DOTFILES="${DOTFILES:-$HOME/dotfiles}"
+PACKAGES=(shell git wezterm nvim lazygit starship)
 
 # Homebrew (also pulls in Xcode Command Line Tools / git)
 if ! command -v brew >/dev/null 2>&1; then
@@ -15,12 +16,15 @@ eval "$(/opt/homebrew/bin/brew shellenv 2>/dev/null || /usr/local/bin/brew shell
 
 # Clone or update the repo
 if [[ -d "$DOTFILES/.git" ]]; then
-  git -C "$DOTFILES" pull --ff-only
+  git -C "$DOTFILES" pull --ff-only || echo "skipping pull (local changes or detached HEAD)"
 else
   git clone "$REPO" "$DOTFILES"
 fi
 
 brew bundle --file="$DOTFILES/Brewfile"
+if [[ -z "${DOTFILES_MINIMAL:-}" ]]; then
+  brew bundle --file="$DOTFILES/Brewfile.extra" || echo "some extras failed to install; continuing"
+fi
 
 # Secret-scanning pre-commit hook
 git -C "$DOTFILES" config core.hooksPath .githooks

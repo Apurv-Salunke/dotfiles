@@ -1,25 +1,32 @@
-# Core
+# Core: everything the configs in this repo depend on.
+# Everything else lives in Brewfile.extra.
+
+# Dotfiles tooling
 brew "git"
+brew "git-delta"
 brew "stow"
 brew "gitleaks"
+
+# Editor / git UI / prompt
 brew "neovim"
 brew "lazygit"
 brew "starship"
+brew "universal-ctags"
 
 # Shell tools
+brew "bat"
 brew "eza"
-brew "fzf"
-brew "zoxide"
-brew "ripgrep"
 brew "fd"
+brew "fzf"
+brew "ripgrep"
+brew "zoxide"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 
-# Languages / runtimes
+# Runtimes managed from .zshrc
 brew "nvm"
 brew "pyenv"
-brew "universal-ctags"
 
-# Apps & fonts
+# Terminal & font
 cask "wezterm"
 cask "font-jetbrains-mono-nerd-font"
