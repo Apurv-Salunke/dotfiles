@@ -14,18 +14,7 @@ return {
     },
   },
 
-  -- 2. Configure Linter (nvim-lint)
-  {
-    "mfussenegger/nvim-lint",
-    opts = {
-      linters_by_ft = {
-        -- Use flake8 instead of (or alongside) ruff
-        -- python = { "flake8" },
-      },
-    },
-  },
-
-  -- 3. Configure LSP (Pyright / Basedpyright)
+  -- 2. Configure LSP (Pyright / Basedpyright)
   {
     "neovim/nvim-lspconfig",
     opts = {
