@@ -59,6 +59,11 @@ export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 
 typeset -U PATH
 
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt SHARE_HISTORY HIST_IGNORE_ALL_DUPS HIST_IGNORE_SPACE HIST_REDUCE_BLANKS EXTENDED_HISTORY
+
 if command -v eza >/dev/null 2>&1; then
   alias ls='eza --icons' ll='eza -lh --icons --git' la='eza -lah --icons --git' lt='eza --tree --icons'
 fi
@@ -73,4 +78,5 @@ if [[ -o interactive ]] && [[ "${TERM_PROGRAM:-}" == "Apple_Terminal" || "${TERM
   [[ -f "$HOME/.zshrc.heavy" ]] && source "$HOME/.zshrc.heavy"
 fi
 
-[[ -f ~/.devserver.zsh ]] && source ~/.devserver.zsh
+# Machine-local / private config (not tracked)
+[[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

@@ -3,6 +3,16 @@ local brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
 
 [[ -f "$HOME/.dotfiles-aliases.zsh" ]] && source "$HOME/.dotfiles-aliases.zsh"
 
+# Completion (brew's site-functions first). Full security check only once a day.
+fpath=("${brew_prefix}/share/zsh/site-functions" $fpath)
+autoload -Uz compinit
+() {
+  local stale=(~/.zcompdump(N.mh+24))
+  if [[ ! -f ~/.zcompdump || -n $stale ]]; then compinit; else compinit -C; fi
+}
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' menu select
+
 [[ -f "${brew_prefix}/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
   source "${brew_prefix}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 [[ -f "${brew_prefix}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && \
