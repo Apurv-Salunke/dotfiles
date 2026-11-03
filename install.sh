@@ -22,6 +22,9 @@ fi
 
 brew bundle --file="$DOTFILES/Brewfile"
 
+# Secret-scanning pre-commit hook
+git -C "$DOTFILES" config core.hooksPath .githooks
+
 # Move aside any real files that would block stow, then link everything
 backup="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 cd "$DOTFILES"

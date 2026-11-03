@@ -1,6 +1,7 @@
 # Core
 brew "git"
 brew "stow"
+brew "gitleaks"
 brew "neovim"
 brew "lazygit"
 brew "starship"
