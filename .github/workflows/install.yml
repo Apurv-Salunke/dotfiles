@@ -1,0 +1,41 @@
+name: install-test
+
+# Runs install.sh on a clean macOS runner to make sure the one-command setup still works.
+on:
+  push:
+    paths-ignore: ['**.md']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  install:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run install.sh
+        env:
+          DOTFILES: ${{ github.workspace }}
+          DOTFILES_MINIMAL: '1'
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+        run: ./install.sh
+
+      - name: Symlinks point into the repo
+        run: |
+          for f in .zshrc .zshrc.heavy .gitconfig .wezterm.lua .config/nvim .config/lazygit .config/starship.toml; do
+            target="$(readlink "$HOME/$f")" || { echo "not a symlink: ~/$f"; exit 1; }
+            echo "~/$f -> $target"
+          done
+
+      - name: Shells and tools start cleanly
+        run: |
+          TERM_PROGRAM=WezTerm zsh -i -c 'whence -w compinit && command -v starship zoxide fzf eza delta'
+          git config --get core.pager | grep -q delta
+          wezterm --config-file ~/.wezterm.lua show-keys >/dev/null
+
+      - name: Neovim loads plugins without errors
+        run: |
+          nvim --headless -c 'lua vim.defer_fn(function()
+            local m = vim.api.nvim_exec2("messages", { output = true }).output
+            if m:match("[Ee]rror") then io.stderr:write(m) vim.cmd("cq") else vim.cmd("qa!") end
+          end, 3000)'
